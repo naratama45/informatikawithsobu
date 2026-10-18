@@ -15,7 +15,9 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => 
   const handleDownload = () => {
     sound.playSelect();
     const link = document.createElement('a');
-    link.href = '/algoritma-tabayyun-standalone.html';
+    const baseUrl = import.meta.env.BASE_URL || './';
+    const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    link.href = `${cleanBase}algoritma-tabayyun-standalone.html`;
     link.download = 'algoritma-tabayyun-tv65.html';
     document.body.appendChild(link);
     link.click();
@@ -24,7 +26,10 @@ export const ExportModal: React.FC<ExportModalProps> = ({ isOpen, onClose }) => 
 
   const handleCopyUrl = () => {
     sound.playSelect();
-    const fullUrl = window.location.origin + '/algoritma-tabayyun-standalone.html';
+    const baseUrl = import.meta.env.BASE_URL || './';
+    const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    const targetPath = `${cleanBase}algoritma-tabayyun-standalone.html`;
+    const fullUrl = new URL(targetPath, window.location.href).href;
     navigator.clipboard.writeText(fullUrl).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
