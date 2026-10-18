@@ -1,0 +1,8 @@
+{
+  "name": "Algoritma Tabayyun - Media Pembelajaran TV Touchscreen",
+  "description": "Media pembelajaran interaktif layar sentuh 65 inch mengintegrasikan Informatika (Berpikir Komputasional/Algoritma) dan Akidah Akhlak (Tabayyun) untuk siswa Kelas X.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

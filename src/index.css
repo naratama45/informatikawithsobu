@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* 3D Flip Card Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Screen Shake Animation */
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-8px, 4px) rotate(-1deg); }
+  20%, 40%, 60%, 80% { transform: translate(8px, -4px) rotate(1deg); }
+}
+
+.animate-screen-shake {
+  animation: screen-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Stamping Drop Animation */
+@keyframes stamp-slam {
+  0% {
+    opacity: 0;
+    transform: scale(3) rotate(-15deg);
+  }
+  70% {
+    opacity: 0.95;
+    transform: scale(0.92) rotate(-3deg);
+  }
+  85% {
+    transform: scale(1.05) rotate(-5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-4deg);
+  }
+}
+
+.animate-stamp {
+  animation: stamp-slam 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Cyber Islamic Geometric Lattice Pattern */
+.bg-cyber-grid {
+  background-color: #080d1a;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+    linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+}
+
+/* Glowing Pulsing Border */
+@keyframes neon-pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), inset 0 0 15px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.7), inset 0 0 25px rgba(16, 185, 129, 0.4);
+  }
+}
+
+.animate-glow-green {
+  animation: neon-pulse-green 2s infinite ease-in-out;
+}
+
+@keyframes neon-pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3), inset 0 0 15px rgba(239, 68, 68, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.7), inset 0 0 25px rgba(239, 68, 68, 0.4);
+  }
+}
+
+.animate-glow-red {
+  animation: neon-pulse-red 2s infinite ease-in-out;
+}
+
+/* Flowchart shapes */
+.shape-parallelogram {
+  transform: skewX(-12deg);
+}
+.shape-parallelogram-content {
+  transform: skewX(12deg);
+}

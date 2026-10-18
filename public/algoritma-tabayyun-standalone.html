@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Algoritma Tabayyun - TV Touchscreen 65 Inch</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- React & ReactDOM CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- Babel Standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+      background-color: #080d1a;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%),
+        linear-gradient(rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+    
+    @keyframes screen-shake {
+      0%, 100% { transform: translate(0, 0); }
+      10%, 30%, 50%, 70%, 90% { transform: translate(-8px, 4px); }
+      20%, 40%, 60%, 80% { transform: translate(8px, -4px); }
+    }
+    .animate-screen-shake {
+      animation: screen-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes stamp-slam {
+      0% { opacity: 0; transform: scale(3) rotate(-15deg); }
+      70% { opacity: 0.95; transform: scale(0.92) rotate(-3deg); }
+      85% { transform: scale(1.05) rotate(-5deg); }
+      100% { opacity: 1; transform: scale(1) rotate(-4deg); }
+    }
+    .animate-stamp {
+      animation: stamp-slam 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .shape-parallelogram { transform: skewX(-12deg); }
+    .shape-parallelogram-content { transform: skewX(12deg); }
+  </style>
+</head>
+<body class="text-slate-100 overflow-hidden m-0 p-0 w-screen h-screen">
+  <div id="root" class="w-full h-full"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Web Audio Synthesizer
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) this.ctx = new AudioCtx();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+      }
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        return this.isMuted;
+      }
+      playSelect() {
+        if (this.isMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(660, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.08);
+      }
+      playSuccess() {
+        if (this.isMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + i * 0.09);
+          gain.gain.setValueAtTime(0.15, now + i * 0.09);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.09);
+          osc.stop(now + i * 0.09 + 0.35);
+        });
+      }
+      playDanger() {
+        if (this.isMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [140, 195].forEach((freq) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(freq, now);
+          osc.frequency.linearRampToValueAtTime(freq - 30, now + 0.35);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.005, now + 0.45);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        });
+      }
+      playStamp() {
+        if (this.isMuted) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + 0.55);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.6);
+      }
+    }
+    const sound = new SoundEngine();
+
+    function App() {
+      const [scene, setScene] = useState(1);
+      const [shake, setShake] = useState(false);
+      const [muted, setMuted] = useState(false);
+
+      const triggerShake = () => {
+        setShake(true);
+        setTimeout(() => setShake(false), 550);
+      };
+
+      return (
+        <div className={`w-full h-full flex flex-col justify-between ${shake ? 'animate-screen-shake' : ''}`}>
+          {/* Top Bar */}
+          <header className="w-full bg-slate-900/90 border-b border-slate-800 px-6 py-3 flex items-center justify-between z-30 shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white">AT</div>
+              <div>
+                <h1 className="font-display font-bold text-lg md:text-xl text-white">ALGORITMA TABAYYUN</h1>
+                <p className="text-xs text-slate-400">Media Pembelajaran TV Touchscreen 65"</p>
+              </div>
+            </div>
+
+            <nav className="flex items-center gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+              {[
+                { id: 1, label: '01. Uji Refleks' },
+                { id: 2, label: '02. Konsep' },
+                { id: 3, label: '03. Flowchart' },
+                { id: 4, label: '04. Verifikasi' },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  onClick={() => { sound.playSelect(); setScene(s.id); }}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all min-h-[44px] ${
+                    scene === s.id ? 'bg-emerald-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setMuted(sound.toggleMute())}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 min-h-[44px] text-sm"
+              >
+                {muted ? '🔇 Bisu' : '🔊 Suara'}
+              </button>
+              <button
+                onClick={() => {
+                  if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+                  else document.exitFullscreen?.().catch(()=>{});
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 min-h-[44px] text-sm"
+              >
+                ⛶ Layar Penuh
+              </button>
+            </div>
+          </header>
+
+          {/* Scene Switcher */}
+          <main className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col items-center justify-center">
+            {scene === 1 && <Scene1 onProceed={() => setScene(2)} onShake={triggerShake} />}
+            {scene === 2 && <Scene2 onProceed={() => setScene(3)} />}
+            {scene === 3 && <Scene3 onSuccess={() => setScene(4)} onShake={triggerShake} />}
+            {scene === 4 && <Scene4 onRestart={() => setScene(1)} />}
+          </main>
+        </div>
+      );
+    }
+
+    // SCENE 1: UJI REFLEKS JARI
+    function Scene1({ onProceed, onShake }) {
+      const [outcome, setOutcome] = useState('idle');
+      const [dragX, setDragX] = useState(0);
+      const isDragging = useRef(false);
+      const startX = useRef(0);
+
+      const onPointerDown = (e) => {
+        if (outcome !== 'idle') return;
+        isDragging.current = true;
+        startX.current = e.clientX;
+        sound.playSelect();
+      };
+      const onPointerMove = (e) => {
+        if (!isDragging.current || outcome !== 'idle') return;
+        setDragX(e.clientX - startX.current);
+      };
+      const onPointerUp = () => {
+        if (!isDragging.current) return;
+        isDragging.current = false;
+        if (dragX < -120) execute('danger');
+        else if (dragX > 120) execute('success');
+        else setDragX(0);
+      };
+
+      const execute = (res) => {
+        setOutcome(res);
+        setDragX(0);
+        if (res === 'danger') {
+          sound.playDanger();
+          onShake();
+        } else {
+          sound.playSuccess();
+        }
+      };
+
+      return (
+        <div className="w-full max-w-6xl flex flex-col items-center text-center">
+          <span className="text-emerald-400 font-mono text-xs uppercase font-bold">SCENE 01 // UJI REFLEKS JARI</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white mt-1">Uji Refleks Jari: Pesan Diterima!</h2>
+          <p className="text-slate-300 text-base md:text-xl mt-2">Sentuh & geser kartu ke kiri (Sebarkan) atau ke kanan (Tahan & Cek)!</p>
+
+          <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-6 items-center my-8">
+            {/* Left Zone: Sebarkan */}
+            <div onClick={() => execute('danger')} className="md:col-span-3 min-h-[260px] rounded-3xl border-2 border-rose-600/60 bg-rose-950/40 hover:bg-rose-900/60 flex flex-col items-center justify-center p-6 cursor-pointer">
+              <span className="text-4xl mb-3">🚨</span>
+              <h3 className="text-2xl font-black text-rose-400">LANGSUNG SEBARKAN</h3>
+              <p className="text-slate-400 text-sm mt-2">Forward ke semua grup sekarang juga</p>
+            </div>
+
+            {/* Center: Card */}
+            <div className="md:col-span-6 flex justify-center">
+              {outcome === 'idle' ? (
+                <div
+                  onPointerDown={onPointerDown}
+                  onPointerMove={onPointerMove}
+                  onPointerUp={onPointerUp}
+                  style={{ transform: `translateX(${dragX}px) rotate(${dragX * 0.05}deg)`, touchAction: 'none' }}
+                  className="w-full max-w-md bg-slate-800 border-2 border-slate-700 hover:border-emerald-400 rounded-3xl p-6 shadow-2xl cursor-grab text-left"
+                >
+                  <div className="flex justify-between border-b border-slate-700 pb-3 mb-4 text-xs text-slate-400">
+                    <span className="font-bold text-white">Grup Angkatan X-Akademik</span>
+                    <span>06:45 WIB</span>
+                  </div>
+                  <div className="bg-emerald-950/60 border border-emerald-500/30 p-4 rounded-2xl mb-4">
+                    <span className="text-rose-400 text-xs font-black uppercase">⚠️ PESAN MENDESAK</span>
+                    <p className="text-xl md:text-2xl font-black text-white mt-2">
+                      "BOCORAN KUNCI JAWABAN UJIAN BESOK! Klik link ini sekarang!"
+                    </p>
+                    <p className="text-xs text-emerald-400 underline mt-2">bit.ly/kunci-rahasia-akademik</p>
+                  </div>
+                  <div className="flex justify-between text-xs text-slate-400">
+                    <span className="text-rose-400">← Geser: Sebarkan</span>
+                    <span className="text-emerald-400">Geser: Tabayyun →</span>
+                  </div>
+                </div>
+              ) : outcome === 'danger' ? (
+                <div className="w-full max-w-md bg-rose-950 border-2 border-rose-500 rounded-3xl p-6 text-center">
+                  <span className="text-5xl">💥</span>
+                  <h3 className="text-2xl font-black text-rose-400 mt-2">DANGER: Anda Menyebarkan Hoax!</h3>
+                  <p className="text-slate-200 text-sm my-3 italic">
+                    "Jika seseorang yang fasik datang kepadamu membawa berita, maka telitilah kebenarannya (tabayyun)..." (Q.S. Al-Hujurat: 6)
+                  </p>
+                  <button onClick={() => setOutcome('idle')} className="w-full py-3 rounded-xl bg-rose-600 font-bold text-white min-h-[50px]">
+                    Ulangi Refleks Jari
+                  </button>
+                </div>
+              ) : (
+                <div className="w-full max-w-md bg-emerald-950 border-2 border-emerald-500 rounded-3xl p-6 text-center">
+                  <span className="text-5xl">✅</span>
+                  <h3 className="text-2xl font-black text-emerald-400 mt-2">Refleks Hebat: TABAYYUN!</h3>
+                  <p className="text-slate-200 text-sm my-3">
+                    Siswa cerdas menahan jempolnya dari menyebarkan informasi liar tanpa verifikasi.
+                  </p>
+                  <button onClick={onProceed} className="w-full py-3 rounded-xl bg-emerald-500 text-slate-950 font-black text-lg min-h-[50px]">
+                    Lanjut ke Konsep (Scene 2) →
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Right Zone: Tabayyun */}
+            <div onClick={() => execute('success')} className="md:col-span-3 min-h-[260px] rounded-3xl border-2 border-emerald-600/60 bg-emerald-950/40 hover:bg-emerald-900/60 flex flex-col items-center justify-center p-6 cursor-pointer">
+              <span className="text-4xl mb-3">🛡️</span>
+              <h3 className="text-2xl font-black text-emerald-400">TAHAN & CEK (TABAYYUN)</h3>
+              <p className="text-slate-400 text-sm mt-2">Tahan jari, cek sumber resmi sekolah</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // SCENE 2: FLASHCARD KONSEP
+    function Scene2({ onProceed }) {
+      const [flipped, setFlipped] = useState(new Set());
+      const toggle = (id) => {
+        sound.playSelect();
+        setFlipped(prev => {
+          const next = new Set(prev);
+          if (next.has(id)) next.delete(id); else next.add(id);
+          return next;
+        });
+      };
+
+      const cards = [
+        { id: 1, infor: 'Input Data', inforDesc: 'Menerima data stream dari sensor / input pengguna.', akhlak: 'Menerima Informasi', akhlakDesc: 'Menangkap kabar sebelum disimpulkan (Wurudul Khabar).' },
+        { id: 2, infor: 'Processing', inforDesc: 'Sanitasi & validasi data dari kode berbahaya.', akhlak: 'Cek Sanad / Sumber', akhlakDesc: 'Memeriksa keabsahan sanad penyampai fakta (Tabayyun).' },
+        { id: 3, infor: 'Decision (If/Else)', inforDesc: 'Percabangan logika Boolean untuk alur eksekusi.', akhlak: 'Bermanfaat / Mudharat?', akhlakDesc: 'Kaidah Fiqih: Mencegah mafsadat lebih utama dari mencari manfaat.' },
+        { id: 4, infor: 'Output', inforDesc: 'Kirim data ke memori publik atau hapus total.', akhlak: 'Diam atau Bagikan', akhlakDesc: 'HR. Bukhari: "Berkata baik atau diamlah."' },
+      ];
+
+      return (
+        <div className="w-full max-w-6xl flex flex-col items-center text-center">
+          <span className="text-emerald-400 font-mono text-xs uppercase font-bold">SCENE 02 // INTERACTIVE FLASHCARDS</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white mt-1">Konsep: Informatika &times; Tabayyun</h2>
+          <p className="text-slate-300 text-base md:text-lg mt-2">Tap kartu untuk membalik & melihat padanan komputasi dengan adab Islam.</p>
+
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-8">
+            {cards.map(c => {
+              const isF = flipped.has(c.id);
+              return (
+                <div key={c.id} onClick={() => toggle(c.id)} className="min-h-[300px] perspective-1000 cursor-pointer">
+                  <div className={`relative w-full h-full duration-500 transform-style-3d transition-transform ${isF ? 'rotate-y-180' : ''}`}>
+                    {/* Front */}
+                    <div className="absolute inset-0 backface-hidden rounded-3xl bg-slate-900 border-2 border-cyan-500/40 p-6 flex flex-col justify-between text-left shadow-xl">
+                      <div>
+                        <span className="text-cyan-400 text-xs font-mono font-bold">INFORMATIKA // 0{c.id}</span>
+                        <h3 className="text-2xl font-black text-white mt-2">{c.infor}</h3>
+                        <p className="text-slate-300 text-sm mt-3">{c.inforDesc}</p>
+                      </div>
+                      <span className="text-xs text-cyan-400 font-semibold">🔄 Tap untuk Balik</span>
+                    </div>
+                    {/* Back */}
+                    <div className="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl bg-emerald-950 border-2 border-emerald-500 p-6 flex flex-col justify-between text-left shadow-xl">
+                      <div>
+                        <span className="text-emerald-400 text-xs font-mono font-bold">AKIDAH AKHLAK // 0{c.id}</span>
+                        <h3 className="text-2xl font-black text-emerald-300 mt-2">{c.akhlak}</h3>
+                        <p className="text-slate-200 text-sm mt-3">{c.akhlakDesc}</p>
+                      </div>
+                      <span className="text-xs text-emerald-300 font-semibold">✅ Dipahami</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <button onClick={onProceed} className="py-4 px-10 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xl min-h-[60px]">
+            Mulai Tantangan Flowchart (Scene 3) →
+          </button>
+        </div>
+      );
+    }
+
+    // SCENE 3: PRAKTIK INTI FLOWCHART
+    function Scene3({ onSuccess, onShake }) {
+      const BLOCKS = [
+        { id: 'b1', text: 'Mulai: Terima Informasi', shape: 'oval', target: 1 },
+        { id: 'b2', text: 'Cek Validitas Sumber Info', shape: 'rect', target: 2 },
+        { id: 'b3', text: 'Apakah info benar & bermanfaat?', shape: 'diamond', target: 3 },
+        { id: 'b4', text: 'Hapus & Abaikan', shape: 'parallelogram', target: 4 },
+        { id: 'b5', text: 'Sebarkan demi Kebaikan', shape: 'parallelogram', target: 5 },
+      ];
+
+      const [slots, setSlots] = useState({ 1: null, 2: null, 3: null, 4: null, 5: null });
+      const [bank, setBank] = useState([...BLOCKS].sort(() => Math.random() - 0.5));
+      const [selected, setSelected] = useState(null);
+      const [error, setError] = useState(null);
+
+      const handleBlockTap = (b) => {
+        sound.playSelect();
+        setSelected(selected?.id === b.id ? null : b);
+      };
+
+      const handleSlotTap = (slotNum) => {
+        sound.playSelect();
+        if (selected) {
+          const oldInSlot = slots[slotNum];
+          setSlots(prev => {
+            const next = { ...prev, [slotNum]: selected };
+            Object.keys(next).forEach(k => {
+              if (parseInt(k, 10) !== slotNum && next[k]?.id === selected.id) next[k] = null;
+            });
+            return next;
+          });
+          setBank(prev => {
+            const filtered = prev.filter(b => b.id !== selected.id);
+            if (oldInSlot && oldInSlot.id !== selected.id) return [...filtered, oldInSlot];
+            return filtered;
+          });
+          setSelected(null);
+          setError(null);
+        } else if (slots[slotNum]) {
+          const rem = slots[slotNum];
+          setSlots(prev => ({ ...prev, [slotNum]: null }));
+          setBank(prev => [...prev, rem]);
+          setError(null);
+        }
+      };
+
+      const isComplete = Object.values(slots).every(s => s !== null);
+
+      const verify = () => {
+        const correct = slots[1]?.id === 'b1' && slots[2]?.id === 'b2' && slots[3]?.id === 'b3' && slots[4]?.id === 'b4' && slots[5]?.id === 'b5';
+        if (correct) {
+          sound.playSuccess();
+          onSuccess();
+        } else {
+          sound.playDanger();
+          onShake();
+          setError('Susunan belum tepat! Periksa apakah Oval di Mulai, Belah Ketupat di Decision, dan cabang False menuju Hapus & Abaikan.');
+        }
+      };
+
+      return (
+        <div className="w-full max-w-5xl flex flex-col items-center text-center">
+          <span className="text-emerald-400 font-mono text-xs uppercase font-bold">SCENE 03 // TANTANGAN ALGORITMA</span>
+          <h2 className="text-3xl font-black text-white">Susun Flowchart Algoritma Tabayyun</h2>
+          <p className="text-slate-300 text-sm mt-1">Tap blok di bank bawah lalu tap slot kosong di atas untuk memindahkan.</p>
+
+          {error && <div className="mt-2 p-3 bg-rose-950 border border-rose-500 text-rose-200 rounded-xl text-sm">{error}</div>}
+
+          {/* Flowchart Tree */}
+          <div className="w-full flex flex-col items-center my-6">
+            {/* Slot 1: Oval */}
+            <div onClick={() => handleSlotTap(1)} className={`w-72 h-14 rounded-full border-2 border-dashed flex items-center justify-center p-2 cursor-pointer ${slots[1] ? 'border-solid border-cyan-400 bg-cyan-950/60 font-bold' : selected ? 'border-emerald-400 bg-emerald-950/30' : 'border-slate-600'}`}>
+              {slots[1] ? slots[1].text : '[Slot 1: Terminator Mulai (Oval)]'}
+            </div>
+            <div className="text-emerald-400 my-1 font-bold">↓</div>
+
+            {/* Slot 2: Rect */}
+            <div onClick={() => handleSlotTap(2)} className={`w-72 h-14 rounded-xl border-2 border-dashed flex items-center justify-center p-2 cursor-pointer ${slots[2] ? 'border-solid border-blue-400 bg-blue-950/60 font-bold' : selected ? 'border-emerald-400 bg-emerald-950/30' : 'border-slate-600'}`}>
+              {slots[2] ? slots[2].text : '[Slot 2: Proses Verifikasi (Persegi)]'}
+            </div>
+            <div className="text-amber-400 my-1 font-bold">↓</div>
+
+            {/* Slot 3: Diamond */}
+            <div onClick={() => handleSlotTap(3)} className={`w-72 h-16 border-2 border-dashed flex items-center justify-center p-2 cursor-pointer ${slots[3] ? 'border-solid border-amber-400 bg-amber-950/60 font-bold text-amber-200' : selected ? 'border-amber-400 bg-amber-950/30' : 'border-slate-600'}`}>
+              {slots[3] ? slots[3].text : '[Slot 3: Decision (Belah Ketupat)]'}
+            </div>
+
+            {/* Branch Labels */}
+            <div className="w-full max-w-xl flex justify-between px-8 text-xs font-mono font-bold my-2">
+              <span className="text-rose-400">↙ TIDAK (Mudharat)</span>
+              <span className="text-emerald-400">YA (Bermanfaat) ↘</span>
+            </div>
+
+            {/* Branch Slots */}
+            <div className="w-full max-w-2xl grid grid-cols-2 gap-6">
+              <div onClick={() => handleSlotTap(4)} className={`h-14 border-2 border-dashed shape-parallelogram flex items-center justify-center p-2 cursor-pointer ${slots[4] ? 'border-solid border-rose-400 bg-rose-950/60 font-bold text-rose-200' : selected ? 'border-rose-400 bg-rose-950/30' : 'border-slate-600'}`}>
+                <span className="shape-parallelogram-content text-xs">{slots[4] ? slots[4].text : '[Slot 4: Output False]'}</span>
+              </div>
+              <div onClick={() => handleSlotTap(5)} className={`h-14 border-2 border-dashed shape-parallelogram flex items-center justify-center p-2 cursor-pointer ${slots[5] ? 'border-solid border-emerald-400 bg-emerald-950/60 font-bold text-emerald-200' : selected ? 'border-emerald-400 bg-emerald-950/30' : 'border-slate-600'}`}>
+                <span className="shape-parallelogram-content text-xs">{slots[5] ? slots[5].text : '[Slot 5: Output True]'}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Block Bank */}
+          <div className="w-full pt-4 border-t border-slate-800">
+            <div className="text-xs text-slate-400 mb-2 font-mono">PILIH BLOK DI BAWAH:</div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {bank.map(b => (
+                <div key={b.id} onClick={() => handleBlockTap(b)} className={`p-3 rounded-xl border-2 text-xs font-bold cursor-pointer min-h-[56px] flex items-center justify-center ${selected?.id === b.id ? 'border-emerald-400 bg-emerald-950' : 'border-slate-700 bg-slate-900 hover:border-slate-500'}`}>
+                  {b.text}
+                </div>
+              ))}
+            </div>
+
+            <button onClick={verify} disabled={!isComplete} className={`w-full max-w-md mt-4 py-4 rounded-2xl font-black text-lg transition-all min-h-[60px] ${isComplete ? 'bg-emerald-500 text-slate-950 cursor-pointer shadow-xl' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}>
+              VERIFIKASI SISTEM (CEK AKHLAK)
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // SCENE 4: WRAP UP & STEMPEL
+    function Scene4({ onRestart }) {
+      useEffect(() => { sound.playStamp(); }, []);
+      return (
+        <div className="w-full max-w-4xl flex flex-col items-center text-center">
+          <span className="text-emerald-400 font-mono text-xs uppercase font-bold">SCENE 04 // WRAP UP & KESIMPULAN</span>
+          
+          <div className="animate-stamp my-6 px-10 py-6 rounded-3xl border-4 border-emerald-400 bg-emerald-950/90 text-emerald-300 shadow-2xl">
+            <h2 className="text-4xl md:text-6xl font-black">SYSTEM VERIFIED:</h2>
+            <h3 className="text-3xl md:text-5xl font-black text-white mt-1">AKHLAK DETECTED</h3>
+            <div className="text-xs font-mono text-emerald-400 mt-2">INTEGRITY 100% // TABAYYUN PROTOCOL ACTIVATED</div>
+          </div>
+
+          <div className="bg-slate-900 border-2 border-slate-700 p-8 rounded-3xl my-4 text-left">
+            <p className="text-xs font-mono uppercase text-emerald-400 font-bold mb-2">QUOTE KESIMPULAN:</p>
+            <blockquote className="text-2xl md:text-3xl font-black text-white leading-relaxed">
+              "Kecerdasan otakmu adalah <span className="text-cyan-400">Hardware</span>, tapi Akhlakmu adalah <span className="text-emerald-400">Operating System (OS)</span>. Jangan biarkan hoax menjadi virus yang merusak sistemmu."
+            </blockquote>
+          </div>
+
+          <button onClick={onRestart} className="mt-4 py-4 px-10 rounded-2xl bg-emerald-500 text-slate-950 font-black text-xl min-h-[60px]">
+            Ulangi Simulasi (Reset)
+          </button>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
