@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Buku Panduan Guru - Algoritma Tabayyun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 1.5cm;
+    }
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      color: #0f172a;
+      line-height: 1.6;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+      font-size: 11pt;
+    }
+    h1, h2, h3, h4, .title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #0f172a;
+    }
+    .page {
+      page-break-after: always;
+      position: relative;
+      min-height: 25cm;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+    }
+    .cover {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 3px solid #10b981;
+      padding: 2.5cm 2cm;
+      box-sizing: border-box;
+      text-align: center;
+      background: #f8fafc;
+    }
+    .badge {
+      display: inline-block;
+      background: #0f172a;
+      color: #10b981;
+      font-weight: bold;
+      font-size: 9pt;
+      padding: 6px 16px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .quote-box {
+      background: #e2e8f0;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      font-weight: bold;
+      color: #047857;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    .q-box {
+      background: #f1f5f9;
+      border-left: 4px solid #0284c7;
+      border-radius: 0 8px 8px 0;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-style: italic;
+    }
+    .print-bar {
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .btn {
+      background: #10b981;
+      color: #0f172a;
+      font-weight: bold;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    @media print {
+      .print-bar {
+        display: none !important;
+      }
+      .cover {
+        min-height: 25.5cm;
+      }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 9.5pt;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    th {
+      background: #e2e8f0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Print Trigger Bar (Hidden on print) -->
+  <div class="print-bar">
+    <div>
+      <strong>Dokumen Cetak Panduan Guru - Algoritma Tabayyun</strong>
+      <span style="color: #94a3b8; font-size: 12px; margin-left: 10px;">Format Siap Cetak / Save as PDF (A4)</span>
+    </div>
+    <div>
+      <button class="btn" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+      <a href="./buku-panduan-guru-algoritma-tabayyun.pdf" download style="color: #6ee7b7; text-decoration: none; margin-left: 15px; font-size: 13px;">📥 Unduh File PDF Langsung</a>
+    </div>
+  </div>
+
+  <div style="max-width: 21cm; margin: 0 auto; padding: 1.5cm 1cm;">
+    <!-- COVER PAGE -->
+    <div class="page cover">
+      <div>
+        <div class="badge">DOKUMEN KURIKULUM RESMI // PEGANGAN GURU</div>
+        <h1 style="font-size: 28pt; margin-top: 1.5cm; color: #0f172a; line-height: 1.2;">
+          BUKU PANDUAN GURU<br>
+          <span style="color: #10b981;">ALGORITMA TABAYYUN</span>
+        </h1>
+        <p style="font-size: 13pt; color: #475569; max-width: 16cm; margin: 0.5cm auto 0;">
+          Konvergensi Berpikir Komputasional (Informatika) & Etika Digital (Akidah Akhlak)<br>
+          Media Pembelajaran Interaktif TV Touchscreen 65 Inch (Rasio 16:9)
+        </p>
+      </div>
+
+      <div class="quote-box">
+        <p style="color: #047857; font-weight: bold; font-size: 10pt; margin: 0 0 6px; text-transform: uppercase;">
+          Filosofi Integratif Utama
+        </p>
+        <blockquote style="font-size: 14pt; font-weight: bold; color: #0f172a; margin: 0; line-height: 1.4;">
+          "Kecerdasan otakmu adalah Hardware, tapi Akhlakmu adalah Operating System (OS). Jangan biarkan hoax menjadi virus yang merusak sistemmu."
+        </blockquote>
+      </div>
+
+      <div style="border-top: 1px solid #cbd5e1; padding-top: 1cm; font-size: 10pt; color: #475569; text-align: left; display: flex; justify-content: space-between;">
+        <div>
+          <strong>Sasaran :</strong> Kelas X Program Khusus Akademik<br>
+          <strong>Mata Pelajaran :</strong> Informatika & Akidah Akhlak
+        </div>
+        <div style="text-align: right;">
+          <strong>Alokasi Waktu :</strong> 2 x 45 Menit<br>
+          <strong>Platform Web :</strong> naratama45.github.io/informatikawithsobu
+        </div>
+      </div>
+    </div>
+
+    <!-- HALAMAN 2: BAB I & II -->
+    <div class="page" style="padding-top: 1cm;">
+      <h2>BAB I: RASIONALITAS PEDAGOGIS & METAFORA OS</h2>
+      <hr style="border: none; border-top: 2px solid #10b981; margin-bottom: 1rem;">
+      <p>
+        Pendidikan abad ke-21 kerap memisahkan nalar komputasi teknis dengan pembinaan karakter moral. Modul <strong>Algoritma Tabayyun</strong> memposisikan prinsip verifikasi kabar (Tabayyun) sebagai <strong>algoritma kognitif dan moral</strong> yang mutlak dieksekusi sebelum data dipublikasikan.
+      </p>
+      
+      <div style="display: flex; gap: 1rem; margin: 1rem 0;">
+        <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; background: #f8fafc;">
+          <h4 style="color: #0284c7; margin-top: 0;">HARDWARE (Informatika)</h4>
+          <ul style="padding-left: 1.2rem; font-size: 9.5pt;">
+            <li>Kapasitas analisis nalar & kecepatan eksekusi logika.</li>
+            <li>Pemodelan data stream dan sintaksis algoritma.</li>
+            <li><em>Kelemahan:</em> Tanpa OS, hardware mengeksekusi script perusak tanpa rasa bersalah.</li>
+          </ul>
+        </div>
+        <div style="flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 1rem; background: #f8fafc;">
+          <h4 style="color: #059669; margin-top: 0;">OPERATING SYSTEM (Akhlak)</h4>
+          <ul style="padding-left: 1.2rem; font-size: 9.5pt;">
+            <li>Kernel moral pengontrol masukan dan luaran data (I/O).</li>
+            <li>Firewall penyaring disinformasi (Q.S. Al-Hujurat: 6).</li>
+            <li><em>Kekuatan:</em> Menjaga ekosistem sosial dari infeksi virus kebohongan dan fitnah.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 1.5cm;">BAB II: DEKONSTRUKSI 4 SCENE INTERAKTIF</h2>
+      <hr style="border: none; border-top: 2px solid #10b981; margin-bottom: 1rem;">
+
+      <div class="card">
+        <div class="card-title">Scene 01 // Uji Refleks Jari (The Hook & Dual-Process Theory)</div>
+        <p style="font-size: 9.5pt; margin: 0;">
+          Mensimulasikan pesan WhatsApp darurat. Menguji peralihan antara <em>System 1</em> (impulsif/reaktif) ke <em>System 2</em> (analitis/kritis). Menggeser ke Merah memicu getar layar dan alarm; menggeser ke Hijau melatih menahan diri sesuai Q.S. Al-Hujurat: 6.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Scene 02 // Konsep 4 Tahap (Interactive Flashcards 3D)</div>
+        <p style="font-size: 9.5pt; margin: 0;">
+          Membandingkan 4 pilar komputasi dengan adab Islam: (1) Input Data &harr; Menerima Informasi (Wurudul Khabar), (2) Processing &harr; Cek Sanad/Sumber (Tabayyun), (3) Decision If/Else &harr; Kaidah Maslahat vs Mudharat, (4) Output &harr; Berkata Baik atau Diam.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Scene 03 // Praktik Flowchart Algoritma Tabayyun (Standar ISO)</div>
+        <p style="font-size: 9.5pt; margin: 0;">
+          Merakit 5 blok standar: Oval (Mulai), Persegi Panjang (Proses Verifikasi), Belah Ketupat (Keputusan Boolean), dan Jajar Genjang (Cabang True/False). Mendukung sentuhan jari dan Tap-to-Move stabil di TV 65".
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Scene 04 // Wrap-Up & Stempel Akhlak (Evaluasi Sistem)</div>
+        <p style="font-size: 9.5pt; margin: 0;">
+          Stempel holografis <em>"SYSTEM VERIFIED: AKHLAK DETECTED"</em> menegaskan bahwa nalar komputasi tertinggi adalah yang dibimbing oleh keluhuran akhlak.
+        </p>
+      </div>
+    </div>
+
+    <!-- HALAMAN 3: BAB III (3 PERTANYAAN KRITIS) -->
+    <div class="page" style="padding-top: 1cm;">
+      <h2>BAB III: 3 PERTANYAAN KRITIS SISWA & JAWABAN SISTEMATIS</h2>
+      <hr style="border: none; border-top: 2px solid #10b981; margin-bottom: 1rem;">
+
+      <!-- Q1 -->
+      <h3 style="color: #0284c7; margin-bottom: 0.3rem;">Pertanyaan 1: Dilema Kebenaran vs Kemaslahatan (Ghibah & Privasi)</h3>
+      <div class="q-box">
+        "Pak/Bu Guru, di Scene 3 syarat decision-nya adalah 'Apakah info benar DAN bermanfaat?'. Bagaimana jika informasinya 100% fakta (ada rekaman video, bukan hoaks), tapi membongkar aib masa lalu teman sekelas? Secara data nilainya True. Apakah kita tetap boleh menyebarkannya?"
+      </div>
+      <div style="font-size: 9.5pt; line-height: 1.5;">
+        <strong>Panduan Jawaban Guru:</strong>
+        <ol style="margin: 0.4rem 0; padding-left: 1.2rem;">
+          <li><strong>Dekonstruksi Operator Logika Boolean AND (&&):</strong> Ingatkan bahwa kondisi berbunyi <code>if (isTrue && isBeneficial)</code>. Jika <code>isTrue == 1</code> namun <code>isBeneficial == 0</code> (merusak aib teman), maka hasil ekspresi logika secara matematis bernilai <strong>0 (FALSE)</strong>. Sistem wajib membelokkan data ke cabang <strong>Hapus & Abaikan</strong>.</li>
+          <li><strong>Tinjauan Hadits tentang Ghibah (HR. Muslim No. 2589):</strong> Membicarakan keburukan saudaramu yang benar-benar ada adalah <em>Ghibah</em>, dan jika tidak benar adalah <em>Fitnah</em>. Kebenaran tanpa maslahat tetap diharamkan syariat.</li>
+          <li><strong>Tinjauan Hukum Siber Modern:</strong> Menyebarkan data pribadi seseorang tanpa hak (<em>doxxing</em>) melanggar UU Perlindungan Data Pribadi (UU PDP No. 27/2022) dan dapat dipidana.</li>
+        </ol>
+      </div>
+
+      <!-- Q2 -->
+      <h3 style="color: #d97706; margin-top: 1cm; margin-bottom: 0.3rem;">Pertanyaan 2: Validasi Otoritas & Bias Institusional (Zero Trust)</h3>
+      <div class="q-box" style="border-left-color: #d97706;">
+        "Bagaimana jika sumber resmi, media arus utama yang terverifikasi, atau tokoh berotoritas itu sendiri yang menyebarkan berita bias atau memanipulasi data demi kepentingan mereka? Apakah kita tetap harus percaya hanya karena labelnya resmi?"
+      </div>
+      <div style="font-size: 9.5pt; line-height: 1.5;">
+        <strong>Panduan Jawaban Guru:</strong>
+        <ol style="margin: 0.4rem 0; padding-left: 1.2rem;">
+          <li><strong>Prinsip Keamanan Siber "Zero Trust Architecture":</strong> Berlaku doktrin <em>"Never Trust, Always Verify"</em>. Berada di dalam jaringan resmi bukan jaminan bebas manipulasi. Setiap paket data tetap harus diuji validitas dan checksum-nya.</li>
+          <li><strong>Metodologi Kritik Hadits (Kritik Matan):</strong> Ulama hadits menolak riwayat tokoh ternama sekalipun jika isi riwayatnya (matan) bertentangan dengan Al-Qur'an atau akal sehat qath'i (diklasifikasikan sebagai Syadz/Munkar).</li>
+          <li><strong>Solusi Triangulasi 3 Sumber:</strong> Lakukan konfirmasi silang ke minimal 3 kanal independen dengan afiliasi politik/bisnis berbeda untuk menyaring fakta objektif murni.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- HALAMAN 4: PERTANYAAN 3 & RPP -->
+    <div class="page" style="padding-top: 1cm;">
+      <!-- Q3 -->
+      <h3 style="color: #e11d48; margin-bottom: 0.3rem;">Pertanyaan 3: Kecepatan (Latency) vs Integritas di Era Medsos</h3>
+      <div class="q-box" style="border-left-color: #e11d48;">
+        "Di TikTok atau X, akun yang paling cepat upload mendapat views dan followers terbanyak (speed over accuracy). Kalau kita tabayyun dulu berjam-jam, bukankah kita akan selalu kalah cepat dan dicap kuper?"
+      </div>
+      <div style="font-size: 9.5pt; line-height: 1.5;">
+        <strong>Panduan Jawaban Guru:</strong>
+        <ol style="margin: 0.4rem 0; padding-left: 1.2rem;">
+          <li><strong>Membongkar Attention Economy:</strong> Algoritma komersial dirancang memaksimalkan <em>durasi tatap layar</em>, bukan kebenaran. Konten kemarahan dan skandal sengaja diviralkan platform demi iklan.</li>
+          <li><strong>Rekayasa Sistem Komputasi (GIGO):</strong> Sistem medis dan perbankan tidak pernah memprioritaskan "asal cepat tapi korup". Hukum <em>Garbage In, Garbage Out</em> membuktikan bahwa kecepatan menyebarkan sampah hanya merusak jaringan masyarakat.</li>
+          <li><strong>Menjadi Firewall, Bukan Repeater:</strong> Orang awam menjadi Repeater (memantulkan sinyal liar). Siswa Program Khusus harus menjadi <strong>Firewall Cerdas</strong>: virus hoaks diisolasi dan dihentikan di perangkatnya. Jejak digital kita abadi di dunia dan dihisab di akhirat (Q.S. Qaf: 18).</li>
+        </ol>
+      </div>
+
+      <h2 style="margin-top: 1.2cm;">BAB IV: SKENARIO RPP & RUBRIK PENILAIAN (2 x 45 MENIT)</h2>
+      <hr style="border: none; border-top: 2px solid #10b981; margin-bottom: 1rem;">
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 28%;">Sesi & Waktu</th>
+            <th>Aktivitas Guru & Siswa di TV Touchscreen 65"</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Apersepsi (15 m)</strong></td>
+            <td>Panggil 1 siswa menyentuh Scene 1. Amati impulsivitas jempol dan diskusikan mengapa dorongan emosi mendahului logika.</td>
+          </tr>
+          <tr>
+            <td><strong>Eksplorasi (25 m)</strong></td>
+            <td>Buka Scene 2. Bagi kelas menjadi 4 kelompok untuk membalik 4 flashcard 3D dan membedah analogi komputasi vs akhlak.</td>
+          </tr>
+          <tr>
+            <td><strong>Simulasi (30 m)</strong></td>
+            <td>Buka Scene 3. Perwakilan kelompok merakit 5 blok algoritma ke diagram flowchart di layar TV 65".</td>
+          </tr>
+          <tr>
+            <td><strong>Sintesis & QnA (20 m)</strong></td>
+            <td>Buka stempel Scene 4. Bedah 3 Pertanyaan Kritis di atas dan simpulkan metafora Hardware vs Operating System.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 9pt; color: #64748b; margin-top: 1cm; text-align: center;">
+        Dokumen ini merupakan bagian dari media pembelajaran interaktif "Algoritma Tabayyun" &bull; Edisi Guru 2026
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

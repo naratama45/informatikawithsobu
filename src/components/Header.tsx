@@ -1,5 +1,5 @@
 import React from 'react';
-import { Volume2, VolumeX, Maximize, Minimize, Download, RefreshCw } from 'lucide-react';
+import { Volume2, VolumeX, Maximize, Minimize, Download, RefreshCw, GraduationCap } from 'lucide-react';
 import { sound } from '../utils/audio';
 
 interface HeaderProps {
@@ -7,6 +7,7 @@ interface HeaderProps {
   onSceneChange: (scene: number) => void;
   onReset: () => void;
   onExport: () => void;
+  onOpenGuide: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSceneChange,
   onReset,
   onExport,
+  onOpenGuide,
 }) => {
   const [isMuted, setIsMuted] = React.useState(false);
   const [isFullscreen, setIsFullscreen] = React.useState(false);
@@ -88,6 +90,15 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Zone 3: Interactive Affordances (Touchscreen friendly) */}
       <div className="flex items-center gap-2 shrink-0">
         <button
+          onClick={onOpenGuide}
+          title="Buku Panduan Guru & Kunci Tanya-Jawab Kritis"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-cyan-500/40 bg-cyan-950/50 hover:bg-cyan-900/60 text-cyan-300 font-bold text-xs md:text-sm min-h-[50px] transition-all shadow-md shadow-cyan-950/30"
+        >
+          <GraduationCap className="w-5 h-5 text-cyan-400" />
+          <span className="hidden sm:inline">Panduan Guru</span>
+        </button>
+
+        <button
           onClick={toggleSound}
           title={isMuted ? 'Aktifkan Suara' : 'Bisukan Suara'}
           className={`p-3 rounded-xl border min-w-[50px] min-h-[50px] flex items-center justify-center transition-all ${
@@ -118,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           onClick={onExport}
           title="Unduh File HTML Mandiri"
-          className="hidden md:flex items-center gap-2 px-3 py-2.5 rounded-xl border border-emerald-500/40 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 font-medium text-xs md:text-sm min-h-[50px] transition-all"
+          className="hidden xl:flex items-center gap-2 px-3 py-2.5 rounded-xl border border-emerald-500/40 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 font-medium text-xs md:text-sm min-h-[50px] transition-all"
         >
           <Download className="w-4 h-4" />
           <span>Single HTML</span>

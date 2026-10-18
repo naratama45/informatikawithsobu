@@ -10,12 +10,14 @@ import { Scene2Concept } from './components/Scene2Concept';
 import { Scene3Flowchart } from './components/Scene3Flowchart';
 import { Scene4WrapUp } from './components/Scene4WrapUp';
 import { ExportModal } from './components/ExportModal';
+import { TeacherGuideModal } from './components/TeacherGuideModal';
 import { sound } from './utils/audio';
 
 export default function App() {
   const [currentScene, setCurrentScene] = useState<number>(1);
   const [isShaking, setIsShaking] = useState<boolean>(false);
   const [isExportOpen, setIsExportOpen] = useState<boolean>(false);
+  const [isGuideOpen, setIsGuideOpen] = useState<boolean>(false);
 
   const triggerScreenShake = () => {
     setIsShaking(true);
@@ -42,6 +44,8 @@ export default function App() {
         sound.toggleMute();
       } else if (e.key.toLowerCase() === 'r') {
         handleReset();
+      } else if (e.key.toLowerCase() === 'g') {
+        setIsGuideOpen((prev) => !prev);
       }
     };
 
@@ -61,6 +65,10 @@ export default function App() {
         onSceneChange={(scene) => setCurrentScene(scene)}
         onReset={handleReset}
         onExport={() => setIsExportOpen(true)}
+        onOpenGuide={() => {
+          sound.playSelect();
+          setIsGuideOpen(true);
+        }}
       />
 
       {/* Main Interactive Stage for 65" 16:9 Viewport */}
@@ -100,6 +108,12 @@ export default function App() {
           />
         )}
       </main>
+
+      {/* Teacher Guidebook Modal */}
+      <TeacherGuideModal
+        isOpen={isGuideOpen}
+        onClose={() => setIsGuideOpen(false)}
+      />
 
       {/* Standalone HTML File Export Modal */}
       <ExportModal
