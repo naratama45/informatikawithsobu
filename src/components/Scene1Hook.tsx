@@ -21,7 +21,11 @@ export const Scene1Hook: React.FC<Scene1HookProps> = ({ onProceed, triggerScreen
     if (outcome !== 'idle') return;
     setIsDragging(true);
     startPos.current = { x: e.clientX, y: e.clientY };
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    try {
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    } catch {
+      // Ignored if pointer capture is not supported or active
+    }
     sound.playSelect();
   };
 
@@ -46,7 +50,11 @@ export const Scene1Hook: React.FC<Scene1HookProps> = ({ onProceed, triggerScreen
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!isDragging) return;
     setIsDragging(false);
-    (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+    try {
+      (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+    } catch {
+      // Ignored
+    }
 
     const threshold = Math.min(window.innerWidth * 0.18, 160);
     if (dragOffset.x < -threshold) {

@@ -1,6 +1,7 @@
 /**
  * Web Audio API synthesizer for Cyber-Islamic Educational Sound Effects
  * Requires no external audio files, works completely offline.
+ * Hardened with defensive try/catch for zero-crash execution across all devices and browsers.
  */
 
 class SoundController {
@@ -8,18 +9,26 @@ class SoundController {
   private isMuted: boolean = false;
 
   constructor() {
-    // AudioContext will be initialized on first user gesture
+    // AudioContext will be initialized safely on user gesture
   }
 
   private initCtx() {
-    if (!this.ctx && typeof window !== 'undefined') {
-      const AudioCtxClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtxClass) {
+    try {
+      if (typeof window === 'undefined') return;
+      const AudioCtxClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!this.ctx && AudioCtxClass) {
         this.ctx = new AudioCtxClass();
       }
-    }
-    if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      if (this.ctx && this.ctx.state === 'suspended') {
+        const p = this.ctx.resume();
+        if (p && typeof p.catch === 'function') {
+          p.catch(() => {});
+        }
+      }
+    } catch {
+      this.ctx = null;
     }
   }
 
@@ -34,10 +43,10 @@ class SoundController {
 
   public playSelect() {
     if (this.isMuted) return;
-    this.initCtx();
-    if (!this.ctx) return;
-
     try {
+      this.initCtx();
+      if (!this.ctx) return;
+
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
@@ -54,16 +63,16 @@ class SoundController {
       osc.start();
       osc.stop(this.ctx.currentTime + 0.08);
     } catch {
-      // AudioContext could fail gracefully
+      // AudioContext fails gracefully
     }
   }
 
   public playCardFlip() {
     if (this.isMuted) return;
-    this.initCtx();
-    if (!this.ctx) return;
-
     try {
+      this.initCtx();
+      if (!this.ctx) return;
+
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
@@ -86,10 +95,10 @@ class SoundController {
 
   public playSuccess() {
     if (this.isMuted) return;
-    this.initCtx();
-    if (!this.ctx) return;
-
     try {
+      this.initCtx();
+      if (!this.ctx) return;
+
       const now = this.ctx.currentTime;
       const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
 
@@ -116,12 +125,11 @@ class SoundController {
 
   public playDanger() {
     if (this.isMuted) return;
-    this.initCtx();
-    if (!this.ctx) return;
-
     try {
+      this.initCtx();
+      if (!this.ctx) return;
+
       const now = this.ctx.currentTime;
-      // Dissonant dual oscillator alarm
       [140, 195].forEach((freq) => {
         const osc = this.ctx!.createOscillator();
         const gain = this.ctx!.createGain();
@@ -146,12 +154,11 @@ class SoundController {
 
   public playStampSlam() {
     if (this.isMuted) return;
-    this.initCtx();
-    if (!this.ctx) return;
-
     try {
+      this.initCtx();
+      if (!this.ctx) return;
+
       const now = this.ctx.currentTime;
-      // Deep bass kick
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
@@ -168,7 +175,6 @@ class SoundController {
       osc.start(now);
       osc.stop(now + 0.6);
 
-      // Metallic high impact resonance
       const metalOsc = this.ctx.createOscillator();
       const metalGain = this.ctx.createGain();
 

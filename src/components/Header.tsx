@@ -26,14 +26,37 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
+    try {
+      const doc = document as unknown as {
+        fullscreenElement?: Element;
+        webkitFullscreenElement?: Element;
+        exitFullscreen?: () => Promise<void>;
+        webkitExitFullscreen?: () => Promise<void>;
+      };
+      const docEl = document.documentElement as unknown as {
+        requestFullscreen?: () => Promise<void>;
+        webkitRequestFullscreen?: () => Promise<void>;
+      };
+
+      const isFs = Boolean(doc.fullscreenElement || doc.webkitFullscreenElement);
+
+      if (!isFs) {
+        if (typeof docEl.requestFullscreen === 'function') {
+          docEl.requestFullscreen().catch(() => {});
+        } else if (typeof docEl.webkitRequestFullscreen === 'function') {
+          docEl.webkitRequestFullscreen();
+        }
+        setIsFullscreen(true);
+      } else {
+        if (typeof doc.exitFullscreen === 'function') {
+          doc.exitFullscreen().catch(() => {});
+        } else if (typeof doc.webkitExitFullscreen === 'function') {
+          doc.webkitExitFullscreen();
+        }
         setIsFullscreen(false);
       }
+    } catch {
+      // Gracefully ignore fullscreen errors on unsupported mobile/iOS browsers
     }
   };
 
